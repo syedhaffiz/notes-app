@@ -1,0 +1,127 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    span.app-name {
+        margin-left: 8px;
+    }
+
+    ::ng-deep .search {
+        width: 15rem;
+        font-size: 10px;
+        font-weight: 400;
+        margin: 16px 0 0 0;
+
+        .mat-form-field-wrapper {
+            width: 100% !important;
+            transition: width 0.4s linear;
+
+            .mat-form-field-outline-start {
+                width: 24px;
+                border-radius: 24px 0 0 24px;
+                background: white;
+            }
+
+            .mat-form-field-outline-gap {
+                background: white;
+            }
+
+            .mat-form-field-outline-end {
+                border-radius: 0 24px 24px 0;
+                background: white;
+            }
+        }
+
+        button {
+            display: inline !important;
+        }
+
+        mat-icon {
+            margin: 0;
+        }
+    }
+
+    .sidenav-container {
+        /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+           causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+        flex: 1;
+
+        mat-sidenav {
+            width: 350px;
+        }
+
+        .add-note {
+            text-align: center;
+
+            margin: 8px;
+
+            button {
+                border-radius: 24px;
+            }
+        }
+
+        .notes-list-item {
+            .note-title {
+                font-size: larger;
+                font-weight: 400;
+                margin-bottom: 8px;
+            }
+
+            .note-time {
+                font-size: small;
+                font-weight: 500;
+            }
+
+            .note-description {
+                margin-left: 8px;
+            }
+        }
+
+        mat-sidenav-content {
+            .note-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .note-time {
+                    margin: 16px;
+                }
+
+                .note-form {
+                    min-width: 150px;
+                    max-width: 500px;
+                    width: 100%;
+                    margin: 16px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .full-width {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.is-mobile {
+    .sidenav-container {
+        /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+           `<body>` to be our scrolling element for mobile layouts. */
+        flex: 1 0 auto;
+
+        mat-sidenav {
+            width: 100%;
+        }
+    }
+}

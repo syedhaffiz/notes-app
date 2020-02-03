@@ -1,0 +1,74 @@
+<div class="container" color="primary" [class.is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary" class="mat-elevation-z2 toolbar">
+        <mat-toolbar-row>
+            <button mat-icon-button (click)="snav.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <img src="assets/automate_logo.svg">
+            <span class="app-name">Notes</span>
+            <span class="spacer"></span>
+
+            <mat-form-field class="search" appearance="outline" color="accent">
+                <input matInput placeholder="Search" [formControl]="searchKeyControl" (keyup)="search(snav)"
+                    autocomplete="off">
+                <button mat-icon-button matSuffix *ngIf="searchKeyControl.value" (click)="clearSearch()"
+                    matTooltip="Clear">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="sidenav-container">
+        <mat-sidenav #snav class="mat-elevation-z2" [mode]="mobileQuery.matches ? 'over' : 'side'"
+            [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="true" [autoFocus]="true">
+
+            <div class="add-note">
+                <button mat-raised-button color="primary" (click)="addnewNote()">
+                    <mat-icon>add</mat-icon>
+                    <span>Take a note...</span>
+                </button>
+            </div>
+
+            <mat-nav-list>
+                <mat-list-item class="notes-list-item" *ngFor="let note of allNotes; index as index"
+                    (click)="showNote(note, index)">
+                    <span class="note-title" mat-line appSearchHighlight [searchText]="searchKeyControl.value"
+                        [text]="note.title" classToApply="highlightText"></span>
+                    <span mat-line>
+                        <span class="note-time">{{note.time | relativeTimeStamp}}</span>
+                        <span class="note-description" appSearchHighlight [searchText]="searchKeyControl.value"
+                            [text]="note.description" classToApply="highlightText"></span>
+                    </span>
+                    <mat-divider [inset]="true"></mat-divider>
+                </mat-list-item>
+                <mat-list-item class="notes-list-item" *ngIf="allNotes.length === 0">
+                    <span class="note-title" mat-line>No items!</span>
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <div class="note-content">
+                <span class="note-time">{{(isNewNote ? currentTime : noteTime) | date:'medium'}}</span>
+                <form class="note-form" [formGroup]="noteForm" (ngSubmit)="isNewNote ? addNote() : updateNote()">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Title</mat-label>
+                        <input matInput [appAutofocus]="true" placeholder="Title" formControlName="title"
+                            autocomplete="off">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Note</mat-label>
+                        <textarea matInput placeholder="Take down your note..." rows="15"
+                            formControlName="description"></textarea>
+                    </mat-form-field>
+
+                    <button mat-fab type="submit" color="primary" [disabled]="!noteForm.valid">
+                        <mat-icon>send</mat-icon>
+                    </button>
+                </form>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

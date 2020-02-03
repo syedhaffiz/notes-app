@@ -4,8 +4,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { NotesService } from './notes.service';
 import { Note } from './note';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-notes',
@@ -44,10 +42,15 @@ export class NotesComponent implements OnInit, OnDestroy {
     ) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this.mobileQueryListener = () => changeDetectorRef.detectChanges();
+        // tslint:disable-next-line: deprecation
         this.mobileQuery.addListener(this.mobileQueryListener);
     }
 
-    addnewNote() {
+    addnewNote(snav) {
+        if (this.mobileQuery.matches) {
+            snav.close();
+        }
+
         this.isNewNote = true;
 
         this.currentTime = new Date().toString();
@@ -57,7 +60,7 @@ export class NotesComponent implements OnInit, OnDestroy {
         });
     }
 
-    showNote(note: Note, index: number) {
+    showNote(note: Note, index: number, snav: any, fromAddNote?: boolean) {
         this.isNewNote = false;
         this.currentNoteIndex = index;
         this.noteTime = note.time.toString();
@@ -66,22 +69,37 @@ export class NotesComponent implements OnInit, OnDestroy {
             title: note.title,
             description: note.description
         });
+
+        if (this.mobileQuery.matches) {
+            snav.close();
+        }
+
+        if (fromAddNote) {
+            snav.open();
+        }
     }
 
-    addNote() {
-        this.notesService.addNote({
+    addNote(snav) {
+        const addedNote = this.notesService.addNote({
             title: this.noteForm.value.title,
             description: this.noteForm.value.description,
             time: new Date()
         });
+
+        this.getNotes(this.searchKeyControl.value);
+
+        this.showNote(addedNote.note, addedNote.index, snav, true);
     }
 
-    updateNote() {
+    updateNote(snav) {
         this.notesService.updateNote({
             title: this.noteForm.value.title,
             description: this.noteForm.value.description,
             time: new Date(this.noteTime)
         }, this.currentNoteIndex);
+
+        this.getNotes(this.searchKeyControl.value);
+        snav.open();
     }
 
     getNotes(searchkey?: string) {
@@ -99,6 +117,7 @@ export class NotesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        // tslint:disable-next-line: deprecation
         this.mobileQuery.removeListener(this.mobileQueryListener);
     }
 

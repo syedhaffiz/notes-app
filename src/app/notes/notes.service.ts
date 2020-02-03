@@ -12,7 +12,7 @@ export class NotesService {
 
     constructor(@Inject(LOCAL_STORAGE) private storageService: StorageService) { }
 
-    addNote(note: Note): void {
+    addNote(note: Note) {
 
         const currentNotesList: Note[] = this.storageService.get(this.STORAGE_KEY) || [];
 
@@ -23,6 +23,11 @@ export class NotesService {
         });
 
         this.storageService.set(this.STORAGE_KEY, currentNotesList);
+
+        return {
+            index: currentNotesList.length - 1,
+            note
+        };
     }
 
     updateNote(note: Note, index: number): void {

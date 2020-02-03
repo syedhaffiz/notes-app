@@ -5,10 +5,11 @@
                 <mat-icon>menu</mat-icon>
             </button>
             <img src="assets/automate_logo.svg">
-            <span class="app-name">Notes</span>
+            <span class="app-name" *ngIf="!mobileQuery.matches">Notes</span>
             <span class="spacer"></span>
 
-            <mat-form-field class="search" appearance="outline" color="accent">
+            <mat-form-field class="search" appearance="outline" color="accent"
+                [style.width]="mobileQuery.matches ? '10rem' : '15rem'">
                 <input matInput placeholder="Search" [formControl]="searchKeyControl" (keyup)="search(snav)"
                     autocomplete="off">
                 <button mat-icon-button matSuffix *ngIf="searchKeyControl.value" (click)="clearSearch()"
@@ -24,7 +25,7 @@
             [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" [opened]="true" [autoFocus]="true">
 
             <div class="add-note">
-                <button mat-raised-button color="primary" (click)="addnewNote()">
+                <button mat-raised-button color="primary" (click)="addnewNote(snav)">
                     <mat-icon>add</mat-icon>
                     <span>Take a note...</span>
                 </button>
@@ -32,7 +33,7 @@
 
             <mat-nav-list>
                 <mat-list-item class="notes-list-item" *ngFor="let note of allNotes; index as index"
-                    (click)="showNote(note, index)">
+                    (click)="showNote(note, index, snav)">
                     <span class="note-title" mat-line appSearchHighlight [searchText]="searchKeyControl.value"
                         [text]="note.title" classToApply="highlightText"></span>
                     <span mat-line>
@@ -51,7 +52,8 @@
         <mat-sidenav-content>
             <div class="note-content">
                 <span class="note-time">{{(isNewNote ? currentTime : noteTime) | date:'medium'}}</span>
-                <form class="note-form" [formGroup]="noteForm" (ngSubmit)="isNewNote ? addNote() : updateNote()">
+                <form class="note-form" [formGroup]="noteForm"
+                    (ngSubmit)="isNewNote ? addNote(snav) : updateNote(snav)">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Title</mat-label>
                         <input matInput [appAutofocus]="true" placeholder="Title" formControlName="title"

@@ -69,7 +69,32 @@
             }
         }
 
+        .no-items {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 48px;
+
+            mat-icon {
+                font-size: 200px;
+                height: 200px;
+                width: 200px;
+            }
+
+            h2 {
+                color: grey;
+            }
+        }
+
         .notes-list-item {
+
+            &:hover,
+            &:active {
+                .delete-note {
+                    visibility: visible;
+                }
+            }
+
             .note-title {
                 font-size: larger;
                 font-weight: 400;
@@ -83,6 +108,10 @@
 
             .note-description {
                 margin-left: 8px;
+            }
+
+            .delete-note {
+                visibility: hidden;
             }
         }
 

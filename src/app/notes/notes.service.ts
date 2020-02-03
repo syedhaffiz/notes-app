@@ -24,10 +24,7 @@ export class NotesService {
 
         this.storageService.set(this.STORAGE_KEY, currentNotesList);
 
-        return {
-            index: currentNotesList.length - 1,
-            note
-        };
+        return note;
     }
 
     updateNote(note: Note, index: number): void {
@@ -40,6 +37,14 @@ export class NotesService {
                 time: note.time
             };
         }
+
+        this.storageService.set(this.STORAGE_KEY, currentNotesList);
+    }
+
+    deleteNote(index: number): void {
+        const currentNotesList: Note[] = this.storageService.get(this.STORAGE_KEY) || [];
+
+        currentNotesList.splice(index, 1);
 
         this.storageService.set(this.STORAGE_KEY, currentNotesList);
     }

@@ -1,9 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { NotesService } from './notes.service';
-import { Note } from './note';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { Note } from './note';
+import { NotesService } from './notes.service';
+import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'app-notes',
@@ -38,6 +42,8 @@ export class NotesComponent implements OnInit, OnDestroy {
     constructor(
         changeDetectorRef: ChangeDetectorRef,
         media: MediaMatcher,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
         private notesService: NotesService
     ) {
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -46,9 +52,19 @@ export class NotesComponent implements OnInit, OnDestroy {
         this.mobileQuery.addListener(this.mobileQueryListener);
     }
 
-    addnewNote(snav) {
-        if (this.mobileQuery.matches) {
+    showDeleteHintForMobile() {
+        this.snackBar.open('Hint: Swipe right on the note to delete it!', null, {
+            duration: 5000
+        });
+    }
+
+    addnewNote(snav, fromAddNote?: boolean) {
+        if (this.mobileQuery.matches && !fromAddNote) {
             snav.close();
+        }
+
+        if (fromAddNote) {
+            snav.open();
         }
 
         this.isNewNote = true;
@@ -60,7 +76,7 @@ export class NotesComponent implements OnInit, OnDestroy {
         });
     }
 
-    showNote(note: Note, index: number, snav: any, fromAddNote?: boolean) {
+    showNote(note: Note, index: number, snav: any) {
         this.isNewNote = false;
         this.currentNoteIndex = index;
         this.noteTime = note.time.toString();
@@ -73,10 +89,6 @@ export class NotesComponent implements OnInit, OnDestroy {
         if (this.mobileQuery.matches) {
             snav.close();
         }
-
-        if (fromAddNote) {
-            snav.open();
-        }
     }
 
     addNote(snav) {
@@ -88,7 +100,7 @@ export class NotesComponent implements OnInit, OnDestroy {
 
         this.getNotes(this.searchKeyControl.value);
 
-        this.showNote(addedNote.note, addedNote.index, snav, true);
+        this.addnewNote(snav, true);
     }
 
     updateNote(snav) {
@@ -100,6 +112,27 @@ export class NotesComponent implements OnInit, OnDestroy {
 
         this.getNotes(this.searchKeyControl.value);
         snav.open();
+    }
+
+    deleteNote(index: number, snav) {
+        const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+            width: this.mobileQuery.matches ? '80%' : '30%',
+            disableClose: true,
+            data: {
+                message: 'Are you sure you want to delete the note?',
+                submitButton: 'Yes',
+                cancelButton: 'No'
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result && result.isTrue) {
+                this.notesService.deleteNote(index);
+                this.getNotes(this.searchKeyControl.value);
+
+                this.addnewNote(snav, true);
+            }
+        });
     }
 
     getNotes(searchkey?: string) {
@@ -123,6 +156,9 @@ export class NotesComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.allNotes = this.notesService.getAllNotes();
+        if (this.mobileQuery.matches) {
+            this.showDeleteHintForMobile();
+        }
     }
 
 }

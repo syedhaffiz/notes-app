@@ -33,7 +33,7 @@
 
             <mat-nav-list>
                 <mat-list-item class="notes-list-item" *ngFor="let note of allNotes; index as index"
-                    (click)="showNote(note, index, snav)">
+                    (click)="showNote(note, index, snav)" (swipeleft)="deleteNote(index, snav)">
                     <span class="note-title" mat-line appSearchHighlight [searchText]="searchKeyControl.value"
                         [text]="note.title" classToApply="highlightText"></span>
                     <span mat-line>
@@ -41,11 +41,16 @@
                         <span class="note-description" appSearchHighlight [searchText]="searchKeyControl.value"
                             [text]="note.description" classToApply="highlightText"></span>
                     </span>
+                    <button mat-mini-fab class="delete-note"
+                        (click)="$event.preventDefault(); deleteNote(index, snav);">
+                        <mat-icon color="warn">delete_outline</mat-icon>
+                    </button>
                     <mat-divider [inset]="true"></mat-divider>
                 </mat-list-item>
-                <mat-list-item class="notes-list-item" *ngIf="allNotes.length === 0">
-                    <span class="note-title" mat-line>No items!</span>
-                </mat-list-item>
+                <div class="no-items" *ngIf="allNotes.length === 0">
+                    <mat-icon color="accent">post_add</mat-icon>
+                    <h2>Notes you add appear here</h2>
+                </div>
             </mat-nav-list>
         </mat-sidenav>
 
@@ -61,7 +66,6 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Note</mat-label>
                         <textarea matInput placeholder="Take down your note..." rows="15"
                             formControlName="description"></textarea>
                     </mat-form-field>

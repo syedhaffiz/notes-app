@@ -33,7 +33,8 @@
 
             <mat-nav-list>
                 <mat-list-item class="notes-list-item" *ngFor="let note of allNotes; index as index"
-                    (click)="showNote(note, index, snav)" (swipeleft)="deleteNote(index, snav)">
+                    (click)="showNote(note, index, snav)" (swipeleft)="deleteNote(index, snav)" (swiperight)="
+                    deleteNote(index, snav)">
                     <span class="note-title" mat-line appSearchHighlight [searchText]="searchKeyControl.value"
                         [text]="note.title" classToApply="highlightText"></span>
                     <span mat-line>

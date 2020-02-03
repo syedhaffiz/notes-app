@@ -51,7 +51,7 @@ export class NotesComponent implements OnInit, OnDestroy {
     }
 
     showDeleteHintForMobile() {
-        this.snackBar.open('Hint: Swipe right on the note to delete it!', null, {
+        this.snackBar.open('Hint: Swipe right or left on the note to delete it!', null, {
             duration: 5000
         });
     }

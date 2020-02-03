@@ -41,7 +41,7 @@
                         <span class="note-description" appSearchHighlight [searchText]="searchKeyControl.value"
                             [text]="note.description" classToApply="highlightText"></span>
                     </span>
-                    <button mat-mini-fab class="delete-note"
+                    <button mat-mini-fab class="delete-note" *ngIf="!mobileQuery.matches"
                         (click)="$event.preventDefault(); deleteNote(index, snav);">
                         <mat-icon color="warn">delete_outline</mat-icon>
                     </button>
@@ -69,10 +69,19 @@
                         <textarea matInput placeholder="Take down your note..." rows="15"
                             formControlName="description"></textarea>
                     </mat-form-field>
-
-                    <button mat-fab type="submit" color="primary" [disabled]="!noteForm.valid">
-                        <mat-icon>send</mat-icon>
-                    </button>
+                    <div class="action-buttons">
+                        <button mat-raised-button type="submit" *ngIf="noteForm.enabled" color="primary"
+                            [disabled]="!noteForm.valid || noteForm.pristine">
+                            <span>Save</span>
+                        </button>
+                        <button mat-raised-button color="primary" *ngIf="noteForm.disabled" (click)="noteForm.enable()">
+                            <span>Edit</span>
+                        </button>
+                        <button mat-raised-button color="primary" *ngIf="noteForm.enabled" (click)="noteForm.disable()"
+                            [style.margin-left]="'16px'">
+                            <span>Cancel</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </mat-sidenav-content>

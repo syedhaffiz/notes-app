@@ -34,9 +34,7 @@ export class NotesComponent implements OnInit, OnDestroy {
         title: new FormControl('', [
             Validators.required
         ]),
-        description: new FormControl('', [
-            Validators.required
-        ]),
+        description: new FormControl('')
     });
 
     constructor(
@@ -77,6 +75,7 @@ export class NotesComponent implements OnInit, OnDestroy {
     }
 
     showNote(note: Note, index: number, snav: any) {
+        this.noteForm.disable();
         this.isNewNote = false;
         this.currentNoteIndex = index;
         this.noteTime = note.time.toString();

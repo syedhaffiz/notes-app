@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prodbuild": "ng build --prod --build-optimizer --vendor-chunk  --base-href https://github.com/syedhaffiz7/notes-app"
   },
   "private": true,
   "dependencies": {

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { SearchHighlightDirective } from './directives/search-highlight.directiv
 import { RelativeTimeStampPipe } from './pipes/relative-time-stamp.pipe';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = {
         swipe: { direction: Hammer.DIRECTION_HORIZONTAL },

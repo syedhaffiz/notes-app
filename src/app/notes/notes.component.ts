@@ -17,7 +17,7 @@ import { ConfirmationModalComponent } from '../confirmation-modal/confirmation-m
 
 export class NotesComponent implements OnInit, OnDestroy {
 
-    @ViewChild('autosize', { static: false }) autosize: CdkTextareaAutosize;
+    @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
     mobileQuery: MediaQueryList;
     private mobileQueryListener: () => void;
